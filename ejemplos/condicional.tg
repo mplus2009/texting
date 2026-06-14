@@ -1,0 +1,6 @@
+Guardar 15 en edad;
+si edad > 17 entonces
+    escribir en consola "Mayor";
+sino
+    escribir en consola "Menor";
+fin;

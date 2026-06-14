@@ -1,0 +1,4 @@
+Guardar 5 en a;
+Guardar 3 en b;
+Guardar a + b en c;
+escribir en consola c;

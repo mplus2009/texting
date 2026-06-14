@@ -1,0 +1,6 @@
+Guardar 5 en x;
+Guardar -3 en y;
+Guardar x + y en z;
+escribir en consola z;
+Guardar -10 en negativo;
+escribir en consola negativo;

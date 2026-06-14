@@ -1,0 +1,10 @@
+Guardar 0 en suma;
+repetir 5 veces
+Guardar suma + 1 en suma;
+fin;
+escribir en consola suma;
+si suma > 3 entonces
+escribir en consola "Mayor que 3";
+sino
+escribir en consola "Menor o igual";
+fin;

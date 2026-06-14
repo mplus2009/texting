@@ -1,0 +1,5 @@
+escribir en consola "Hola Mundo";
+Guardar 10 en x;
+Guardar 20 en y;
+Guardar x + y en z;
+escribir en consola z;

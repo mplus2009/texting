@@ -1,0 +1,24 @@
+# Programa de ejemplo para sistema operativo
+
+escribir en consola "=== Sistema Operativo Texting OS ===";
+
+# Reservar memoria
+reservar 1024 en buffer;
+escribir en consola "Memoria reservada";
+
+# Syscall para salir
+syscall 4();
+
+# Escribir en puerto IO (pantalla)
+entrada_salida 0xB8000, 65;  # Escribir 'A' en pantalla
+
+# Abrir archivo del sistema
+abrir "/boot/kernel.bin" en fd;
+leer_archivo fd en datos;
+cerrar fd;
+
+# Punteros para hardware
+puntero video = 0xB8000;
+puntero teclado = 0x60;
+
+escribir en consola "SO Listo!";

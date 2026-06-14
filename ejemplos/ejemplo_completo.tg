@@ -1,0 +1,47 @@
+# Texting - Programa completo de demostracion
+
+escribir en consola "=== Bienvenido a Texting ===";
+
+# Variables
+Guardar 10 en contador;
+Guardar 0 en suma;
+
+# Bucle repetir
+repetir 5 veces
+    Guardar suma + contador en suma;
+    escribir en consola "Sumando: ";
+    escribir en consola contador;
+    Guardar contador - 1 en contador;
+fin;
+
+escribir en consola "La suma total es:";
+escribir en consola suma;
+
+# Bucle mientras
+Guardar 1 en i;
+mientras i <= 5 hacer
+    escribir en consola i;
+    Guardar i + 1 en i;
+fin;
+
+# Bucle desde
+desde j = 1 hasta 5 paso 1 hacer
+    escribir en consola j;
+fin;
+
+# Entrada de usuario
+escribir en consola "Dime tu nombre:";
+leer entrada en nombre;
+escribir en consola "Hola ";
+escribir en consola nombre;
+
+# Condicional
+si suma > 20 entonces
+    escribir en consola "La suma es mayor que 20";
+sino
+    escribir en consola "La suma es menor o igual a 20";
+fin;
+
+# Números negativos
+Guardar -5 en negativo;
+escribir en consola negativo;

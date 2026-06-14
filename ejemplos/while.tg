@@ -1,0 +1,6 @@
+Guardar 5 en i;
+mientras i > 0 hacer
+    escribir en consola i;
+    Guardar i - 1 en i;
+fin;
+escribir en consola "Despegue!";

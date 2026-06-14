@@ -1,0 +1,16 @@
+# Prueba de características para SO
+
+escribir en consola "Probando Texting para SO";
+
+# Números negativos
+Guardar -5 en negativo;
+escribir en consola negativo;
+
+# Bucle mientras
+Guardar 3 en contador;
+mientras contador > 0 hacer
+    escribir en consola contador;
+    Guardar contador - 1 en contador;
+fin;
+
+escribir en consola "Listo!";

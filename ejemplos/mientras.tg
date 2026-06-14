@@ -1,0 +1,6 @@
+Guardar 3 en contador;
+mientras contador > 0 hacer
+escribir en consola contador;
+Guardar contador - 1 en contador;
+fin;
+escribir en consola "Listo";

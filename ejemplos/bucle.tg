@@ -1,0 +1,5 @@
+Guardar 0 en suma;
+repetir 5 veces
+    Guardar suma + 1 en suma;
+fin;
+escribir en consola suma;
