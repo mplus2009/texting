@@ -3,6 +3,7 @@
 #include <string.h>
 #include "ast.h"
 
+// Funciones básicas
 ASTNode* crear_nodo_programa(ASTNode* primera) {
     ASTNode* nodo = malloc(sizeof(ASTNode));
     nodo->type = NODE_PROGRAMA;
@@ -63,6 +64,59 @@ ASTNode* crear_nodo_mientras(ASTNode* cond, ASTNode* bloque) {
     return nodo;
 }
 
+ASTNode* crear_nodo_lista(ASTNode** elementos, int cantidad) {
+    ASTNode* nodo = malloc(sizeof(ASTNode));
+    nodo->type = NODE_LISTA;
+    nodo->lista.elementos = elementos;
+    nodo->lista.cantidad = cantidad;
+    nodo->next = NULL;
+    return nodo;
+}
+
+ASTNode* crear_nodo_acceso_lista(char* nombre, ASTNode* indice) {
+    ASTNode* nodo = malloc(sizeof(ASTNode));
+    nodo->type = NODE_ACCESO_LISTA;
+    nodo->acceso_lista.nombre = strdup(nombre);
+    nodo->acceso_lista.indice = indice;
+    nodo->next = NULL;
+    return nodo;
+}
+
+ASTNode* crear_nodo_archivo_abrir(char* nombre, char* modo) {
+    ASTNode* nodo = malloc(sizeof(ASTNode));
+    nodo->type = NODE_ARCHIVO_ABRIR;
+    nodo->archivo_abrir.nombre_archivo = strdup(nombre);
+    nodo->archivo_abrir.modo = strdup(modo);
+    nodo->next = NULL;
+    return nodo;
+}
+
+ASTNode* crear_nodo_archivo_leer(char* variable, ASTNode* archivo) {
+    ASTNode* nodo = malloc(sizeof(ASTNode));
+    nodo->type = NODE_ARCHIVO_LEER;
+    nodo->archivo_leer.variable = strdup(variable);
+    nodo->archivo_leer.archivo = archivo;
+    nodo->next = NULL;
+    return nodo;
+}
+
+ASTNode* crear_nodo_archivo_escribir(ASTNode* archivo, ASTNode* dato) {
+    ASTNode* nodo = malloc(sizeof(ASTNode));
+    nodo->type = NODE_ARCHIVO_ESCRIBIR;
+    nodo->archivo_escribir.archivo = archivo;
+    nodo->archivo_escribir.dato = dato;
+    nodo->next = NULL;
+    return nodo;
+}
+
+ASTNode* crear_nodo_archivo_cerrar(ASTNode* archivo) {
+    ASTNode* nodo = malloc(sizeof(ASTNode));
+    nodo->type = NODE_ARCHIVO_CERRAR;
+    nodo->archivo_cerrar.archivo = archivo;
+    nodo->next = NULL;
+    return nodo;
+}
+
 ASTNode* crear_nodo_numero(double num) {
     ASTNode* nodo = malloc(sizeof(ASTNode));
     nodo->type = NODE_NUMERO;
@@ -102,14 +156,42 @@ ASTNode* crear_nodo_condicion(char op, ASTNode* izq, ASTNode* der) {
     return nodo;
 }
 
+// --- Funciones nuevas ---
+
+ASTNode* crear_nodo_definir(char* nombre, char** parametros, int num_params, ASTNode* cuerpo) {
+    ASTNode* nodo = malloc(sizeof(ASTNode));
+    nodo->type = NODE_DEFINIR;
+    nodo->definir.nombre = strdup(nombre);
+    nodo->definir.parametros = parametros;
+    nodo->definir.num_params = num_params;
+    nodo->definir.cuerpo = cuerpo;
+    nodo->next = NULL;
+    return nodo;
+}
+
+ASTNode* crear_nodo_llamada(char* nombre, ASTNode** args, int num_args) {
+    ASTNode* nodo = malloc(sizeof(ASTNode));
+    nodo->type = NODE_LLAMADA;
+    nodo->llamada.nombre = strdup(nombre);
+    nodo->llamada.args = args;
+    nodo->llamada.num_args = num_args;
+    nodo->next = NULL;
+    return nodo;
+}
+
+ASTNode* crear_nodo_retornar(ASTNode* expr) {
+    ASTNode* nodo = malloc(sizeof(ASTNode));
+    nodo->type = NODE_RETORNAR;
+    nodo->retornar.expr = expr;
+    nodo->next = NULL;
+    return nodo;
+}
+
 void agregar_nodo_bloque(ASTNode** bloque, ASTNode* nuevo) {
-    if(*bloque == NULL) {
-        *bloque = nuevo;
-    } else {
-        ASTNode* actual = *bloque;
-        while(actual->next) actual = actual->next;
-        actual->next = nuevo;
-    }
+    if(!*bloque) { *bloque = nuevo; return; }
+    ASTNode* actual = *bloque;
+    while(actual->next) actual = actual->next;
+    actual->next = nuevo;
 }
 
 void liberar_ast(ASTNode* nodo) {

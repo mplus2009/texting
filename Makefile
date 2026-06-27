@@ -1,45 +1,44 @@
 CC = gcc
 CFLAGS = -Wall -g
-LEX = flex
-YACC = bison -d
+BISON = bison -d
+FLEX = flex
 
-SRC_DIR = src
-BIN_DIR = bin
+SRC = src
+BIN = bin
+TARGET = $(BIN)/texting
 
-OBJS = $(SRC_DIR)/lex.yy.o $(SRC_DIR)/parser.tab.o $(SRC_DIR)/ast.o $(SRC_DIR)/interpreter.o
+OBJS = $(SRC)/ast.o $(SRC)/lex.yy.o $(SRC)/parser.tab.o $(SRC)/compiler.o
 
-all: $(BIN_DIR) $(BIN_DIR)/texting
+all: $(BIN) $(TARGET)
 
-$(BIN_DIR):
-mkdir -p $(BIN_DIR)
+$(BIN):
+mkdir -p $(BIN)
 
-$(BIN_DIR)/texting: $(OBJS)
+$(TARGET): $(OBJS)
 $(CC) -o $@ $^ -lm
 
-$(SRC_DIR)/lex.yy.c: $(SRC_DIR)/lexer.l
-$(LEX) -o $@ $<
+$(SRC)/parser.tab.c $(SRC)/parser.tab.h: $(SRC)/parser.y
+$(BISON) -o $(SRC)/parser.tab.c $<
 
-$(SRC_DIR)/parser.tab.c: $(SRC_DIR)/parser.y
-$(YACC) -o $@ $<
+$(SRC)/lex.yy.c: $(SRC)/lexer.l
+$(FLEX) -o $@ $<
 
-$(SRC_DIR)/lex.yy.o: $(SRC_DIR)/lex.yy.c $(SRC_DIR)/parser.tab.h
-$(CC) $(CFLAGS) -c -o $@ $<
-
-$(SRC_DIR)/parser.tab.o: $(SRC_DIR)/parser.tab.c $(SRC_DIR)/ast.h $(SRC_DIR)/interpreter.h
-$(CC) $(CFLAGS) -c -o $@ $<
-
-$(SRC_DIR)/ast.o: $(SRC_DIR)/ast.c $(SRC_DIR)/ast.h
-$(CC) $(CFLAGS) -c -o $@ $<
-
-$(SRC_DIR)/interpreter.o: $(SRC_DIR)/interpreter.c $(SRC_DIR)/interpreter.h $(SRC_DIR)/ast.h
-$(CC) $(CFLAGS) -c -o $@ $<
+$(SRC)/%.o: $(SRC)/%.c
+$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-rm -f $(SRC_DIR)/lex.yy.c $(SRC_DIR)/parser.tab.c $(SRC_DIR)/parser.tab.h
-rm -f $(OBJS)
-rm -rf $(BIN_DIR)
+rm -f $(SRC)/lex.yy.c $(SRC)/parser.tab.c $(SRC)/parser.tab.h
+rm -f $(OBJS) $(TARGET)
 
-test: all
-./bin/texting ejemplos/ejemplo_completo.tg
+test: $(TARGET)
+@echo "=== Probando ejemplos ==="
+@for f in hola variables condicional bucle mientras completo; do \
+echo "--- $$f.tg ---"; \
+./$(TARGET) ejemplos/$$f.tg ejemplos/$$f.asm; \
+if [ -f ejemplos/$$f.asm ]; then \
+nasm -f bin ejemplos/$$f.asm -o ejemplos/$$f.bin 2>/dev/null; \
+echo "  ✅ $$f.bin generado"; \
+fi; \
+done
 
 .PHONY: all clean test

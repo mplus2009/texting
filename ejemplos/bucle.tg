@@ -1,5 +1,5 @@
-Guardar 0 en suma;
+guardar 0 en contador
 repetir 5 veces
-    Guardar suma + 1 en suma;
-fin;
-escribir en consola suma;
+    guardar contador + 1 en contador
+    escribir en consola contador
+fin

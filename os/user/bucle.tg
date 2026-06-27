@@ -1,0 +1,7 @@
+# Bucle de ejemplo
+Guardar 1 en i;
+mientras i <= 5 hacer
+    escribir en consola i;
+    Guardar i + 1 en i;
+fin;
+escribir en consola "Fin del bucle";

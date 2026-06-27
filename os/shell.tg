@@ -1,0 +1,36 @@
+# Texting OS Shell - Interprete de comandos interactivo
+# Comandos disponibles: escribir, guardar, si, mientras, repetir, salir
+
+escribir en consola "=========================================";
+escribir en consola "  Texting OS Shell v1.0";
+escribir en consola "=========================================";
+escribir en consola "Comandos disponibles:";
+escribir en consola "  - escribir en consola 'texto'";
+escribir en consola "  - Guardar NUMERO en VARIABLE";
+escribir en consola "  - escribir en consola VARIABLE";
+escribir en consola "  - si CONDICION entonces ... fin";
+escribir en consola "  - repetir N veces ... fin";
+escribir en consola "  - salir";
+escribir en consola "=========================================";
+
+# Bucle principal del shell
+Guardar 1 en ejecutando;
+
+mientras ejecutando == 1 hacer
+    escribir en consola "";
+    escribir en consola ">>> ";
+    
+    # Leer comando del usuario
+    leer entrada en comando;
+    
+    # Evaluar comando
+    si comando == "salir" entonces
+        ejecutando = 0;
+        escribir en consola "Saliendo del shell...";
+    sino
+        # Ejecutar el comando ingresado
+        ejecutar comando;
+    fin;
+fin;
+
+escribir en consola "Shell terminado";

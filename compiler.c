@@ -1,0 +1,136 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "ast.h"
+
+FILE* out;
+int var_count = 0;
+char var_names[100][50];
+int label_count = 0;
+
+int get_var_index(char* nombre) {
+    for(int i = 0; i < var_count; i++) {
+        if(strcmp(var_names[i], nombre) == 0) return i;
+    }
+    strcpy(var_names[var_count], nombre);
+    return var_count++;
+}
+
+void compile_expression(ASTNode* node) {
+    if(!node) return;
+    switch(node->type) {
+        case NODE_NUMERO:
+            fprintf(out, "    mov ax, %d\n", (int)node->numero.numero);
+            break;
+        case NODE_IDENTIFICADOR:
+            fprintf(out, "    mov ax, [var_%d]\n", get_var_index(node->identificador.nombre));
+            break;
+        case NODE_OPERACION:
+            compile_expression(node->operacion.izquierda);
+            fprintf(out, "    push ax\n");
+            compile_expression(node->operacion.derecha);
+            fprintf(out, "    pop bx\n");
+            switch(node->operacion.operador) {
+                case '+': fprintf(out, "    add ax, bx\n"); break;
+                case '-': fprintf(out, "    sub ax, bx\n"); break;
+                case '*': fprintf(out, "    mul bx\n"); break;
+                case '/': fprintf(out, "    xor dx, dx\n    div bx\n"); break;
+            }
+            break;
+        default: break;
+    }
+}
+
+void compile_instruction(ASTNode* node) {
+    if(!node) return;
+    
+    int lbl1, lbl2;
+    
+    switch(node->type) {
+        case NODE_ASIGNACION:
+            compile_expression(node->asignacion.expresion);
+            fprintf(out, "    mov [var_%d], ax\n", get_var_index(node->asignacion.nombre));
+            break;
+            
+        case NODE_ESCRIBIR:
+            compile_expression(node->escritura.expresion);
+            fprintf(out, "    call print_num\n");
+            fprintf(out, "    call print_newline\n");
+            break;
+            
+        case NODE_SI:
+            lbl1 = label_count++;
+            lbl2 = label_count++;
+            
+            compile_expression(node->si.condicion->condicion.izquierda);
+            fprintf(out, "    push ax\n");
+            compile_expression(node->si.condicion->condicion.derecha);
+            fprintf(out, "    pop bx\n");
+            fprintf(out, "    cmp bx, ax\n");
+            
+            switch(node->si.condicion->condicion.operador) {
+                case '>': fprintf(out, "    jle .else_%d\n", lbl1); break;
+                case '<': fprintf(out, "    jge .else_%d\n", lbl1); break;
+                case '=': fprintf(out, "    jne .else_%d\n", lbl1); break;
+            }
+            
+            // Bloque SI
+            ASTNode* curr = node->si.bloque_si;
+            while(curr) {
+                compile_instruction(curr);
+                curr = curr->next;
+            }
+            fprintf(out, "    jmp .end_%d\n", lbl1);
+            
+            // Bloque SINO
+            fprintf(out, ".else_%d:\n", lbl1);
+            if(node->si.bloque_sino) {
+                curr = node->si.bloque_sino;
+                while(curr) {
+                    compile_instruction(curr);
+                    curr = curr->next;
+                }
+            }
+            
+            fprintf(out, ".end_%d:\n", lbl1);
+            break;
+            
+        default: break;
+    }
+}
+
+void compile_program(ASTNode* program, const char* output_file) {
+    out = fopen(output_file, "w");
+    if(!out) return;
+
+    fprintf(out, "; Compilado por Texting Compiler\n");
+    fprintf(out, "BITS 16\n");
+    fprintf(out, "ORG 0x1000\n\nstart:\n");
+
+    ASTNode* node = program;
+    while(node) {
+        compile_instruction(node);
+        node = node->next;
+    }
+
+    fprintf(out, "    jmp $\n\nprint_num:\n");
+    fprintf(out, "    push ax\n    push bx\n    push cx\n    push dx\n");
+    fprintf(out, "    mov cx, 10\n    xor bx, bx\n");
+    fprintf(out, ".div_loop:\n    xor dx, dx\n    div cx\n");
+    fprintf(out, "    push dx\n    inc bx\n    test ax, ax\n    jnz .div_loop\n");
+    fprintf(out, ".print_loop:\n    pop dx\n    add dl, '0'\n");
+    fprintf(out, "    mov ah, 0x0E\n    int 0x10\n");
+    fprintf(out, "    dec bx\n    jnz .print_loop\n");
+    fprintf(out, "    pop dx\n    pop cx\n    pop bx\n    pop ax\n    ret\n\n");
+
+    fprintf(out, "print_newline:\n");
+    fprintf(out, "    mov ah, 0x0E\n    mov al, 0x0D\n    int 0x10\n");
+    fprintf(out, "    mov al, 0x0A\n    int 0x10\n    ret\n\n");
+
+    fprintf(out, "section .bss\n");
+    for(int i = 0; i < var_count; i++) {
+        fprintf(out, "var_%d resw 1  ; %s\n", i, var_names[i]);
+    }
+
+    fclose(out);
+}

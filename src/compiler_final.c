@@ -1,0 +1,159 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "ast.h"
+
+FILE* out;
+int var_count = 0;
+char var_names[100][50];
+
+int get_var_index(char* nombre) {
+    for(int i = 0; i < var_count; i++) {
+        if(strcmp(var_names[i], nombre) == 0) return i;
+    }
+    strcpy(var_names[var_count], nombre);
+    return var_count++;
+}
+
+void compile_expression(ASTNode* node) {
+    if(!node) return;
+    
+    switch(node->type) {
+        case NODE_NUMERO:
+            fprintf(out, "    mov ax, %d\n", (int)node->numero.numero);
+            break;
+            
+        case NODE_IDENTIFICADOR:
+            fprintf(out, "    mov ax, [var_%d]\n", get_var_index(node->identificador.nombre));
+            break;
+            
+        case NODE_OPERACION:
+            compile_expression(node->operacion.izquierda);
+            fprintf(out, "    push ax\n");
+            compile_expression(node->operacion.derecha);
+            fprintf(out, "    pop bx\n");
+            switch(node->operacion.operador) {
+                case '+': fprintf(out, "    add ax, bx\n"); break;
+                case '-': fprintf(out, "    sub ax, bx\n"); break;
+                case '*': fprintf(out, "    mul bx\n"); break;
+                case '/': fprintf(out, "    xor dx, dx\n    div bx\n"); break;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+void compile_instruction(ASTNode* node) {
+    if(!node) return;
+    
+    switch(node->type) {
+        case NODE_ASIGNACION:
+            compile_expression(node->asignacion.valor);
+            fprintf(out, "    mov [var_%d], ax\n", get_var_index(node->asignacion.nombre));
+            break;
+            
+        case NODE_ESCRITURA:
+            compile_expression(node->escritura.expr);
+            fprintf(out, "    call print_num\n");
+            break;
+            
+        case NODE_REPETIR:
+            fprintf(out, "    mov cx, %d\n", node->repetir.veces);
+            fprintf(out, "repetir_loop_%d:\n", node->repetir.veces);
+            compile_instruction(node->repetir.bloque);
+            fprintf(out, "    loop repetir_loop_%d\n", node->repetir.veces);
+            break;
+            
+        default:
+            break;
+    }
+}
+
+void compile_program(ASTNode* program, const char* output_file) {
+    out = fopen(output_file, "w");
+    if(!out) {
+        perror("No se puede crear archivo");
+        return;
+    }
+    
+    fprintf(out, "; Código generado por compilador Texting\n");
+    fprintf(out, "BITS 16\n");
+    fprintf(out, "ORG 0x1000\n\n");
+    
+    fprintf(out, "start:\n");
+    
+    // Compilar instrucciones
+    ASTNode* node = program;
+    while(node) {
+        compile_instruction(node);
+        node = node->next;
+    }
+    
+    // Fin del programa
+    fprintf(out, "    jmp $\n\n");
+    
+    // Función para imprimir números
+    fprintf(out, "print_num:\n");
+    fprintf(out, "    push ax\n");
+    fprintf(out, "    push bx\n");
+    fprintf(out, "    push cx\n");
+    fprintf(out, "    push dx\n");
+    fprintf(out, "    mov cx, 10\n");
+    fprintf(out, "    xor bx, bx\n");
+    fprintf(out, ".div_loop:\n");
+    fprintf(out, "    xor dx, dx\n");
+    fprintf(out, "    div cx\n");
+    fprintf(out, "    push dx\n");
+    fprintf(out, "    inc bx\n");
+    fprintf(out, "    test ax, ax\n");
+    fprintf(out, "    jnz .div_loop\n");
+    fprintf(out, ".print_loop:\n");
+    fprintf(out, "    pop dx\n");
+    fprintf(out, "    add dl, '0'\n");
+    fprintf(out, "    mov ah, 0x0E\n");
+    fprintf(out, "    int 0x10\n");
+    fprintf(out, "    dec bx\n");
+    fprintf(out, "    jnz .print_loop\n");
+    fprintf(out, "    pop dx\n");
+    fprintf(out, "    pop cx\n");
+    fprintf(out, "    pop bx\n");
+    fprintf(out, "    pop ax\n");
+    fprintf(out, "    ret\n\n");
+    
+    // Variables
+    fprintf(out, "section .bss\n");
+    for(int i = 0; i < var_count; i++) {
+        fprintf(out, "var_%d resw 1  ; %s\n", i, var_names[i]);
+    }
+    
+    fclose(out);
+}
+
+int main(int argc, char** argv) {
+    if(argc < 3) {
+        fprintf(stderr, "Uso: %s entrada.tg salida.asm\n", argv[0]);
+        return 1;
+    }
+    
+    extern FILE* yyin;
+    extern ASTNode* raiz;
+    extern int yyparse();
+    
+    yyin = fopen(argv[1], "r");
+    if(!yyin) {
+        perror("No se puede abrir");
+        return 1;
+    }
+    
+    if(yyparse() != 0) {
+        fprintf(stderr, "Error de sintaxis\n");
+        fclose(yyin);
+        return 1;
+    }
+    
+    compile_program(raiz, argv[2]);
+    fclose(yyin);
+    printf("Compilado: %s\n", argv[2]);
+    return 0;
+}

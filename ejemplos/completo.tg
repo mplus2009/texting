@@ -1,10 +1,19 @@
-Guardar 0 en suma;
-repetir 5 veces
-Guardar suma + 1 en suma;
-fin;
-escribir en consola suma;
-si suma > 3 entonces
-escribir en consola "Mayor que 3";
-sino
-escribir en consola "Menor o igual";
-fin;
+# Programa completo en Texting
+escribir en consola "=== Calculadora simple ==="
+guardar 10 en a
+guardar 20 en b
+guardar a + b en suma
+guardar a * b en producto
+guardar a - b en resta
+guardar a / b en division
+escribir en consola "Suma:"
+escribir en consola suma
+escribir en consola "Producto:"
+escribir en consola producto
+escribir en consola "Resta:"
+escribir en consola resta
+escribir en consola "Division:"
+escribir en consola division
+si suma > 20 entonces
+    escribir en consola "La suma es mayor que 20"
+fin

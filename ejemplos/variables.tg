@@ -1,0 +1,4 @@
+guardar 10 en x
+guardar 20 en y
+guardar x + y en suma
+escribir en consola suma

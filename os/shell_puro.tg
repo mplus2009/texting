@@ -1,0 +1,61 @@
+# Texting OS Shell - Versión completamente en Texting
+# Este shell interpreta comandos ingresados por el usuario
+
+escribir en consola "";
+escribir en consola "╔═══════════════════════════════════════════╗";
+escribir en consola "║     Texting OS Shell - Pure Texting       ║";
+escribir en consola "╚═══════════════════════════════════════════╝";
+escribir en consola "";
+escribir en consola "Comandos: (escribir, guardar, si, repetir, mientras, ver, limpiar, salir)";
+escribir en consola "";
+
+# Variables del shell
+Guardar 1 en ejecutar;
+Guardar "" en ultimo_comando;
+
+# Función para mostrar ayuda
+mostrar_ayuda:
+    escribir en consola "";
+    escribir en consola "=== Comandos disponibles ===";
+    escribir en consola "  Guardar NUM en VAR;              - Guardar numero";
+    escribir en consola "  escribir en consola TEXTO;       - Mostrar texto";
+    escribir en consola "  escribir en consola VAR;         - Mostrar variable";
+    escribir en consola "  si X > Y entonces ... fin;       - Condicional";
+    escribir en consola "  repetir N veces ... fin;         - Bucle fijo";
+    escribir en consola "  mientras X > Y hacer ... fin;    - Bucle while";
+    escribir en consola "  ver variables                    - Listar variables";
+    escribir en consola "  limpiar                          - Limpiar pantalla";
+    escribir en consola "  salir / exit                     - Salir del shell";
+    escribir en consola "======================================";
+    escribir en consola "";
+    retornar;
+;
+
+# Bucle principal
+mientras ejecutar == 1 hacer
+    escribir en consola "texting> ";
+    leer entrada en comando;
+    
+    si comando == "salir" entonces
+        ejecutar = 0;
+        escribir en consola "Saliendo del shell...";
+    sino si comando == "exit" entonces
+        ejecutar = 0;
+    sino si comando == "help" entonces
+        mostrar_ayuda;
+    sino si comando == "ayuda" entonces
+        mostrar_ayuda;
+    sino si comando == "limpiar" entonces
+        # Limpiar pantalla (ANSI)
+        escribir en consola "\033[2J\033[1;1H";
+    sino si comando == "ver variables" entonces
+        escribir en consola "Variables definidas:";
+        # Esto es un marcador - la implementación real necesita acceso a la tabla
+        escribir en consola "  (funcion en desarrollo)";
+    sino
+        # Ejecutar el comando ingresado como código Texting
+        ejecutar comando;
+    fin;
+fin;
+
+escribir en consola "Shell finalizado";

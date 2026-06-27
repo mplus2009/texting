@@ -1,0 +1,7 @@
+# Programa de usuario
+escribir en consola "Hola desde Texting!";
+Guardar 5 en a;
+Guardar 3 en b;
+Guardar a + b en c;
+escribir en consola "5 + 3 = ";
+escribir en consola c;

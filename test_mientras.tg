@@ -1,0 +1,5 @@
+guardar 1 en i;
+mientras (i <= 5) hacer {
+    escribir en consola i;
+    guardar i + 1 en i;
+}

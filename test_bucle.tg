@@ -1,0 +1,3 @@
+repetir 5 veces {
+    escribir en consola "Hola";
+}

@@ -1,0 +1,27 @@
+# Texting OS Kernel
+escribir en consola "=========================================";
+escribir en consola "  Texting OS Kernel v1.0";
+escribir en consola "=========================================";
+escribir en consola "Kernel cargado correctamente";
+escribir en consola "Inicializando hardware...";
+
+# Bucle principal
+Guardar 0 en ticks;
+repetir 10 veces
+    Guardar ticks + 1 en ticks;
+    si ticks % 5 == 0 entonces
+        escribir en consola "Heartbeat";
+    fin;
+fin;
+
+escribir en consola "=========================================";
+escribir en consola "Sistema listo!";
+escribir en consola "Bienvenido a Texting OS";
+escribir en consola "=========================================";
+
+# Demostracion de variables
+Guardar 10 en x;
+Guardar 20 en y;
+Guardar x + y en z;
+escribir en consola "Demostracion: 10 + 20 = ";
+escribir en consola z;

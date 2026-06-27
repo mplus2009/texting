@@ -1,0 +1,12 @@
+definir sumar(a, b) {
+    retornar a + b;
+}
+
+definir saludar(nombre) {
+    escribir en consola "Hola " & nombre;
+}
+
+guardar sumar(5, 3) en resultado;
+escribir en consola resultado;
+
+saludar("Mundo");

@@ -1,0 +1,7 @@
+escribir en consola "Hola desde Texting"
+guardar 42 en respuesta
+escribir en consola respuesta
+guardar 10 en a
+guardar 20 en b
+guardar a + b en suma
+escribir en consola suma

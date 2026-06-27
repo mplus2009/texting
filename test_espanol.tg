@@ -1,0 +1,6 @@
+guardar 15 en varr
+si varr mayor 14 entonces
+escribir en consola varr & " es mayor"
+sino
+escribir en consola varr & " es menor"
+fin

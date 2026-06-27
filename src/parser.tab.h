@@ -59,24 +59,37 @@ extern int yydebug;
     TOKEN_EN = 260,                /* TOKEN_EN  */
     TOKEN_LEER = 261,              /* TOKEN_LEER  */
     TOKEN_SI = 262,                /* TOKEN_SI  */
-    TOKEN_ENTONCES = 263,          /* TOKEN_ENTONCES  */
-    TOKEN_SINO = 264,              /* TOKEN_SINO  */
-    TOKEN_FIN = 265,               /* TOKEN_FIN  */
-    TOKEN_REPETIR = 266,           /* TOKEN_REPETIR  */
-    TOKEN_VECES = 267,             /* TOKEN_VECES  */
-    TOKEN_MIENTRAS = 268,          /* TOKEN_MIENTRAS  */
-    TOKEN_HACER = 269,             /* TOKEN_HACER  */
-    TOKEN_NUMERO = 270,            /* TOKEN_NUMERO  */
-    TOKEN_DECIMAL = 271,           /* TOKEN_DECIMAL  */
-    TOKEN_IDENTIFICADOR = 272,     /* TOKEN_IDENTIFICADOR  */
-    TOKEN_STRING = 273,            /* TOKEN_STRING  */
-    TOKEN_MAS = 274,               /* TOKEN_MAS  */
-    TOKEN_MENOS = 275,             /* TOKEN_MENOS  */
-    TOKEN_MULTIPLICAR = 276,       /* TOKEN_MULTIPLICAR  */
-    TOKEN_DIVIDIR = 277,           /* TOKEN_DIVIDIR  */
-    TOKEN_MENOR = 278,             /* TOKEN_MENOR  */
-    TOKEN_MAYOR = 279,             /* TOKEN_MAYOR  */
-    UMINUS = 280                   /* UMINUS  */
+    TOKEN_SINO = 263,              /* TOKEN_SINO  */
+    TOKEN_REPETIR = 264,           /* TOKEN_REPETIR  */
+    TOKEN_VECES = 265,             /* TOKEN_VECES  */
+    TOKEN_MIENTRAS = 266,          /* TOKEN_MIENTRAS  */
+    TOKEN_HACER = 267,             /* TOKEN_HACER  */
+    TOKEN_LISTA = 268,             /* TOKEN_LISTA  */
+    TOKEN_ABRIR = 269,             /* TOKEN_ABRIR  */
+    TOKEN_LEER_ARCHIVO = 270,      /* TOKEN_LEER_ARCHIVO  */
+    TOKEN_ESCRIBIR_ARCHIVO = 271,  /* TOKEN_ESCRIBIR_ARCHIVO  */
+    TOKEN_CERRAR_ARCHIVO = 272,    /* TOKEN_CERRAR_ARCHIVO  */
+    TOKEN_NUMERO = 273,            /* TOKEN_NUMERO  */
+    TOKEN_DECIMAL = 274,           /* TOKEN_DECIMAL  */
+    TOKEN_IDENTIFICADOR = 275,     /* TOKEN_IDENTIFICADOR  */
+    TOKEN_STRING = 276,            /* TOKEN_STRING  */
+    TOKEN_MAS = 277,               /* TOKEN_MAS  */
+    TOKEN_MENOS = 278,             /* TOKEN_MENOS  */
+    TOKEN_MULTIPLICAR = 279,       /* TOKEN_MULTIPLICAR  */
+    TOKEN_DIVIDIR = 280,           /* TOKEN_DIVIDIR  */
+    TOKEN_MODULO = 281,            /* TOKEN_MODULO  */
+    TOKEN_POTENCIA = 282,          /* TOKEN_POTENCIA  */
+    TOKEN_MENOR = 283,             /* TOKEN_MENOR  */
+    TOKEN_MAYOR = 284,             /* TOKEN_MAYOR  */
+    TOKEN_MENOR_IGUAL = 285,       /* TOKEN_MENOR_IGUAL  */
+    TOKEN_MAYOR_IGUAL = 286,       /* TOKEN_MAYOR_IGUAL  */
+    TOKEN_IGUALDAD = 287,          /* TOKEN_IGUALDAD  */
+    TOKEN_DIFERENTE = 288,         /* TOKEN_DIFERENTE  */
+    TOKEN_CONCAT = 289,            /* TOKEN_CONCAT  */
+    TOKEN_NEWLINE = 290,           /* TOKEN_NEWLINE  */
+    TOKEN_DEFINIR = 291,           /* TOKEN_DEFINIR  */
+    TOKEN_RETORNAR = 292,          /* TOKEN_RETORNAR  */
+    UMINUS = 293                   /* UMINUS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -85,14 +98,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 16 "src/parser.y"
+#line 15 "src/parser.y"
 
     int numero;
     double decimal;
     char* texto;
     struct ASTNode* nodo;
 
-#line 96 "src/parser.tab.h"
+#line 109 "src/parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

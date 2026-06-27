@@ -1,0 +1,5 @@
+definir suma(a, b) {
+    retornar a + b;
+}
+guardar suma(20, 15) en resultado;
+escribir en consola resultado;

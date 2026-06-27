@@ -1,0 +1,5 @@
+guardar 0 en contador
+repetir 5 veces
+guardar contador + 1 en contador
+escribir en consola contador
+fin

@@ -1,0 +1,9 @@
+escribir en consola "=== Calculadora ==="
+guardar 5 en x
+guardar 3 en y
+guardar x + y en suma
+guardar x * y en producto
+escribir en consola "Suma:"
+escribir en consola suma
+escribir en consola "Producto:"
+escribir en consola producto
